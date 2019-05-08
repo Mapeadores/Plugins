@@ -8,7 +8,7 @@
 public Plugin myinfo = 
 {
 	name = "Weapon Sprite Temp-Fix",
-	author = "vegetable tuxxedo",
+	author = "Mapeadores",
 	description = "Changes render mode for sprites post-DZ Sirocco.",
 	version = "0.1",
 	url = ""
