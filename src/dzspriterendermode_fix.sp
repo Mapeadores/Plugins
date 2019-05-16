@@ -9,8 +9,8 @@ public Plugin myinfo =
 {
 	name = "Weapon Sprite Temp-Fix",
 	author = "Mapeadores",
-	description = "Changes render mode for sprites post-DZ Sirocco.",
-	version = "0.1",
+	description = "Changes render mode for parented sprites post-DZ Sirocco.",
+	version = "0.2",
 	url = ""
 };
 
@@ -24,7 +24,9 @@ public CheckSprite(int entity)
 	if (IsValidEntity(entity)){
 		int ParentEntity = GetEntPropEnt(entity, Prop_Data, "m_pParent");
 		
-		if (IsValidEntity(ParentEntity)){			
+		if (IsValidEntity(ParentEntity)){
+			ParentEntity = GetRootMoveParent(ParentEntity);
+			
 			char ParentClassName[32];
 			GetEntityClassname(ParentEntity, ParentClassName, sizeof(ParentClassName));
 			
@@ -38,4 +40,20 @@ public CheckSprite(int entity)
 			}
 		}
 	}
+}
+
+int GetRootMoveParent(iEntity) {
+    int iCurrentEntity = iEntity;
+	
+    while (IsValidEntity(iCurrentEntity)) {
+        int iCurrentParent = GetEntPropEnt(iCurrentEntity, Prop_Data, "m_pParent");
+		
+        if (!IsValidEntity(iCurrentParent)) {
+            return iCurrentEntity;
+        }
+		
+        iCurrentEntity = iCurrentParent;
+    }
+	
+    return iCurrentEntity;
 }
