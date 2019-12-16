@@ -51,9 +51,12 @@ public void Event_WeaponFire(Handle event, char[] name, bool dontBroadcast)
 			char WeaponName[256];
 			GetEventString(event, "weapon", WeaponName, sizeof(WeaponName));
 			
+			bool DontGiveAmmo;
 			for (int i = 0; i <= AmmoFilterTotal; i++)
-				if (StrContains(WeaponName, AmmoToFilter[i], false) == -1)
-					SetReserveAmmo(PlayerID, GetReserveAmmo(PlayerID) + 1);
+				if (!DontGiveAmmo && StrContains(WeaponName, AmmoToFilter[i], false) != -1)
+					DontGiveAmmo = true;
+					
+			if (!DontGiveAmmo) SetReserveAmmo(PlayerID, GetReserveAmmo(PlayerID) + 1);
 		}
 	}
 }
