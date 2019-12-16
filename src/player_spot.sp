@@ -63,6 +63,8 @@ public Action GlowPlayer(int client, int args)
 		int target_list[MAXPLAYERS], target_count;
 		bool tn_is_ml;
 		
+		float EngineTime = GetEngineTime();
+		
 		if ((target_count = ProcessTargetString(arg1, client, target_list, MAXPLAYERS, COMMAND_FILTER_CONNECTED, target_name, sizeof(target_name), tn_is_ml)) > 0){
 			for (int i = 0; i < target_count; i++){
 				if (IsClientInGame(target_list[i]) && IsPlayerAlive(target_list[i])){
@@ -78,7 +80,6 @@ public Action GlowPlayer(int client, int args)
 						
 						if (target_count > 1){
 							//So we don't flood the logging. Ugly way out.
-							float EngineTime = GetEngineTime();
 							if (EngineTime > LastFrame + 0.1){
 								LogAction(client, target_list[i], "%s<%s> spotted multiple players for %f.", AdminName, AdminSteam, StringToFloat(arg2));
 								ReplyToCommand(client, "[SM] Spotted multiple players for %f.", StringToFloat(arg2));
