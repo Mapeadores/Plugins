@@ -14,16 +14,27 @@ public Plugin myinfo =
 {
 	name = "Counter Values",
 	author = "Mapeadores",
-	description = "Print math_counter values.",
-	version = "0.2",
+	description = "Print values.",
+	version = "0.3",
 	url = ""
 };
 
 public void OnPluginStart()
 {
-	RegAdminCmd("sm_countervalues", ToggleMathCounterValuesPrint, ADMFLAG_RCON, "sm_countervalues - Toggle print math_counter values.");
+	RegAdminCmd("sm_countervalues", ToggleMathCounterValuesPrint, ADMFLAG_RCON, "sm_countervalues - Toggle print values.");
 	
 	HookEntityOutput("math_counter", "OutValue", GetMathCounterValues);
+	
+	HookEntityOutput("func_breakable", "OnHealthChanged", GetBreakableValues);
+	HookEntityOutput("func_physbox", "OnHealthChanged", GetBreakableValues);
+	HookEntityOutput("func_physbox_multiplayer", "OnHealthChanged", GetBreakableValues);
+	
+	HookEntityOutput("prop_dynamic", "OnHealthChanged", GetBreakableValues);
+	HookEntityOutput("prop_physics", "OnHealthChanged", GetBreakableValues);
+	HookEntityOutput("prop_physics_multiplayer", "OnHealthChanged", GetBreakableValues);
+	HookEntityOutput("prop_door_rotating", "OnHealthChanged", GetBreakableValues);
+	
+	HookEntityOutput("chicken", "OnHealthChanged", GetBreakableValues);
 }
 
 public void GetMathCounterValues(const char[] output, int caller, int activator, float delay)
@@ -38,7 +49,29 @@ public void GetMathCounterValues(const char[] output, int caller, int activator,
 		float Min = GetEntPropFloat(caller, Prop_Data, "m_flMin");
 		float Max = GetEntPropFloat(caller, Prop_Data, "m_flMax");
 		
-		PrintToConsoleAll_Roots("TargetName: %s, Value: %f, Min: %f, Max: %f", TargetName, TrueOutValue, Min, Max);
+		if (strlen(TargetName) == 0)
+			Format(TargetName, sizeof(TargetName), "NULL");
+		
+		PrintToConsoleAll_Roots("math_counter TargetName: %s, Value: %f, Min: %f, Max: %f", TargetName, TrueOutValue, Min, Max);
+	}
+}
+
+public void GetBreakableValues(const char[] output, int caller, int activator, float delay)
+{
+	if (ShouldPrintValues){
+		char TargetName[32];
+		GetEntPropString(caller, Prop_Data, "m_iName", TargetName, sizeof(TargetName));
+		
+		char ClassName[32];
+		GetEdictClassname(caller, ClassName, sizeof(ClassName));
+		
+		int Health = GetEntProp(caller, Prop_Data, "m_iHealth");
+		
+		if (strlen(TargetName) == 0)
+			Format(TargetName, sizeof(TargetName), "NULL");
+			
+		if (Health > 0)
+			PrintToConsoleAll_Roots("%s TargetName: %s, Health: %i", ClassName, TargetName, Health);
 	}
 }
 
@@ -46,10 +79,10 @@ public Action ToggleMathCounterValuesPrint(int client, int args)
 {
 	if (ShouldPrintValues){
 		ShouldPrintValues = false;
-		ReplyToCommand(client, "[SM] math_counter prints are off.");
+		ReplyToCommand(client, "[SM] Value prints are off.");
 	} else {
 		ShouldPrintValues = true;
-		ReplyToCommand(client, "[SM] math_counter prints are on.");
+		ReplyToCommand(client, "[SM] Value prints are on.");
 	}	
 }
 
