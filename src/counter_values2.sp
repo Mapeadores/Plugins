@@ -84,6 +84,7 @@ public Action ToggleMathCounterValuesPrint(int client, int args)
 		ShouldPrintValues = true;
 		ReplyToCommand(client, "[SM] Value prints are on.");
 	}	
+	return Plugin_Handled;
 }
 
 public void OnMapEnd()

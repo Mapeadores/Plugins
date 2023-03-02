@@ -12,12 +12,12 @@
 	FORMULA				m*ln(x)+c
 	
 		PING			DOWNLOAD TIME
-         40                 25        
-         60                 27        
-         80                 29        
-        100                 31        
-        150                 34        
-        200                 38        
+		 40                 25        
+		 60                 27        
+		 80                 29        
+		100                 31        
+		150                 34        
+		200                 38        
 */
 
 #include <sdktools>
@@ -74,7 +74,7 @@ public void OnClientConnected(client)
 	ConnectionTime[client] = GetEngineTime();
 }
 
-public Action Event_PlayerConnectFull(Handle event, char[] name, bool dontBroadcast)
+public void Event_PlayerConnectFull(Handle event, char[] name, bool dontBroadcast)
 {
 	int PlayerUserID = GetEventInt(event, "userid");
 	int Player = GetClientOfUserId(PlayerUserID);
@@ -112,4 +112,5 @@ public void ClientParticleCacheCheck(int client)
 public Action CmdRejoin(int client, int args)
 {
 	ClientCommand(client, "echo [SERVER] You are being reconnected now!;disconnect;retry");
+	return Plugin_Handled;
 }

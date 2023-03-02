@@ -105,6 +105,7 @@ public Action GlowPlayer(int client, int args)
 	} else {
 		ReplyToCommand(client, "[SM] Invalid parameters.");
 	}
+	return Plugin_Handled;
 }
 
 public void Event_PlayerDeath(Handle event, char[] name, bool dontBroadcast)
@@ -148,6 +149,7 @@ public void SpotRemainingCT(bool Timer)
 public Action ZR_OnClientInfect(&client, &attacker, &bool:motherInfect, &bool:respawnOverride, &bool:respawn)
 {
 	if (motherInfect && !CanSpot) CanSpot = true;
+	return Plugin_Continue;
 }
 
 public void Event_RoundStarted(Handle event, char[] name, bool dontBroadcast)

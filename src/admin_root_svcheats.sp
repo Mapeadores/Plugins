@@ -47,4 +47,5 @@ public Action ReplicateValue(int client, int args)
 	} else {
 		ReplyToCommand(client, "[SM] Invalid parameters.");
 	}
+	return Plugin_Handled;
 }
